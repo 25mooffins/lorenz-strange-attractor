@@ -8,6 +8,9 @@ let array = [[]];
 var numberOfLines = 50;
 var scaleFactor = 10;
 var maxPoints = 30;
+
+const rotateSpeed = 0.01;
+var currentAngle = 0;
 class p{
 
     constructor(x, y, z){
@@ -25,6 +28,7 @@ function setup(){
     height = window.innerHeight-10;
     createCanvas(width, height, WEBGL);
 
+    // debugMode();
     frameRate(60);
     background(0);
     
@@ -35,14 +39,23 @@ function setup(){
         var point = new p(number/5,number/5,number/5);
         array[number].push(point);
     }
+
+    
     
     
 }
 
 function draw(){
-    
     strokeWeight(0.5);
     orbitControl();
+
+    currentAngle+=rotateSpeed;
+    if(currentAngle>=360){
+        currentAngle = 0;
+    }
+    rotateY(currentAngle);
+    rotateX(currentAngle);
+    rotateZ(currentAngle);
 
     for(let number = 0; number < numberOfLines; number++){
         if(array[number].length >= maxPoints){
@@ -58,6 +71,7 @@ function draw(){
     
     clear();
     
+    const zAdjust = 260;
     for(let number = 0; number < numberOfLines; number++){
         
         beginShape();
@@ -66,11 +80,16 @@ function draw(){
             var color = i*255/array[number].length;
             stroke(color*1.6, color+30, color*3);
             // point(displayPoint.x, displayPoint.y, displayPoint.z);
-            vertex(displayPoint.x, displayPoint.y, displayPoint.z);
+            vertex(displayPoint.x, displayPoint.y, displayPoint.z - zAdjust);
         }
         endShape(); 
     }
     
+    //debug to find zAdjust
+    // strokeWeight(2);
+    // stroke('pink');
+    // translate(0,0,260); 
+    // sphere(10);
     
 }
 
